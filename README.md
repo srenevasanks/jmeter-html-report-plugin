@@ -71,19 +71,19 @@ This plugin focuses on simplifying API test result analysis by providing:
 
 ### Dashboard Summary
 
-[Add Screenshot]
+<img width="1919" height="1014" alt="001" src="https://github.com/user-attachments/assets/40781fee-92e9-4642-b08c-bd5f729b9dfb" />
 
 ### Failure Analysis
 
-[Add Screenshot]
-
-### Response Code Filtering
-
-[Add Screenshot]
+<img width="1919" height="1022" alt="005" src="https://github.com/user-attachments/assets/24a1fdf7-55f1-4bf5-8ff4-045b1a776f0f" />
 
 ### Request & Response Details
 
-[Add Screenshot]
+<img width="1919" height="1022" alt="002" src="https://github.com/user-attachments/assets/cf6907de-4814-458c-a36a-86d528293631" />
+
+<img width="1919" height="1024" alt="003" src="https://github.com/user-attachments/assets/cecb77bf-b909-4588-948a-d0d9f3e96d05" />
+
+<img width="1919" height="1022" alt="004" src="https://github.com/user-attachments/assets/d47af73a-58ea-4b74-8cfb-ac1c4fe04dfe" />
 
 ---
 
@@ -188,7 +188,7 @@ Inspect request and response information directly from the report, including:
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-github-id>/jmeter-api-test-report-plugin.git
+git clone https://github.com/srenevasanks/jmeter-api-test-report-plugin.git
 ```
 
 Navigate to the project:
@@ -263,7 +263,7 @@ Apache License 2.0
 
 ## Author
 
-S. Vasan
+Srenevasan
 
 GitHub:
-https://github.com/<your-github-id>
+https://github.com/srenevasanks
