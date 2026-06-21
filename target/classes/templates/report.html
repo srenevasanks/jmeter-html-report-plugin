@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{SCRIPT_NAME}} Execution Report</title>
+    <style>
+        {{CSS}}
+    </style>
+</head>
+<body>
+    <script>
+        (function(){const t=localStorage.getItem('theme');if(t==='dark')document.body.setAttribute('data-theme','dark');})();
+    </script>
+
+    <!-- Header Wrapper (Outside Card) -->
+    <div style='position:relative; margin: 20px auto; max-width:1200px; text-align:center;'>
+        <h1>{{SCRIPT_NAME}} Execution Report</h1>
+        <p style='font-style:italic; font-size:0.9em; margin-top:5px; color:var(--text-body);'>{{TITLE_DATE}}</p>
+        <div class='theme-wrapper' style='position:absolute; top:0; right:0;'>
+            <label class='theme-switch'>
+                <input type='checkbox' id='theme-toggle' onchange='toggleTheme()'>
+                <span class='slider round'></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Start Main Container -->
+    <div class='container'>
+        <div style='text-align:center; font-weight:500; margin-bottom: 20px; font-size: 2.5em;'>
+            Execution Status - <span style='color:{{STATUS_COLOR}}'>{{EXEC_STATUS}}</span>
+        </div>
+
+        <div class='summary-grid'>
+            <div class='summary-card'>
+                <h3>Pass Ratio</h3>
+                <div class='pie-wrapper'>
+                    <div class='pie-chart' data-text='{{PASS_RATE_SHORT}}%'></div>
+                </div>
+            </div>
+
+            <div class='summary-card'>
+                <h3>Execution Metrics</h3>
+                <table style='width:100%; border-collapse: collapse; margin-top: auto; margin-bottom: auto; font-size: 0.95em;'>
+                    <tr>
+                        <td style='padding: 8px; border-bottom: 1px dashed var(--border-card); color:var(--text-body);'>Total Requests:</td>
+                        <td style='padding: 8px; text-align: right; font-weight: bold; border-bottom: 1px dashed var(--border-card); color:var(--text-main);'>{{TOTAL_REQUESTS}}</td>
+                    </tr>
+                    <tr>
+                        <td style='padding: 8px; border-bottom: 1px dashed var(--border-card); color:var(--text-body);'>Passed:</td>
+                        <td style='padding: 8px; text-align: right; font-weight: bold; color: var(--text-pass); border-bottom: 1px dashed var(--border-card);'>{{PASSED_REQUESTS}}</td>
+                    </tr>
+                    <tr>
+                        <td style='padding: 8px; border-bottom: 1px dashed var(--border-card); color:var(--text-body);'>Failed:</td>
+                        <td style='padding: 8px; text-align: right; font-weight: bold; color: var(--text-fail); border-bottom: 1px dashed var(--border-card);'>{{FAILED_REQUESTS}}</td>
+                    </tr>
+                    <tr>
+                        <td style='padding: 8px; border-bottom: 1px dashed var(--border-card); color:var(--text-body);'>Pass %:</td>
+                        <td style='padding: 8px; text-align: right; font-weight: bold; border-bottom: 1px dashed var(--border-card); color:var(--text-main);'>{{PASS_RATE_FULL}}%</td>
+                    </tr>
+                    <tr>
+                        <td style='padding: 8px; border-bottom: 1px dashed var(--border-card); color:var(--text-body);'>Avg Time:</td>
+                        <td style='padding: 8px; text-align: right; font-weight: bold; border-bottom: 1px dashed var(--border-card); color:var(--text-main);'>{{AVG_TIME}} ms</td>
+                    </tr>
+                    <tr>
+                        <td style='padding: 8px; color:var(--text-body);'>Total Duration:</td>
+                        <td style='padding: 8px; text-align: right; font-weight: bold; color:var(--text-main);'>{{TOTAL_DURATION}} ms</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class='summary-card'>
+                <h3>Status Codes</h3>
+                <div class='status-table-wrapper'>
+                    <div class='status-list'>
+                        <div class='status-header'>
+                            <span>Code</span><span>Pass</span><span>Fail</span><span>Total</span>
+                        </div>
+                        {{STATUS_ROWS}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='tabs'>
+            <button class='tab-btn active' onclick="openTab(event,'tab-all')">All Requests</button>
+            <button class='tab-btn' onclick="openTab(event,'tab-passed')">Passed</button>
+            <button class='tab-btn' onclick="openTab(event,'tab-failed')">Failed</button>
+        </div>
+
+        <div id='tab-all' class='tab-content active'>
+            {{ALL_REQUESTS_LIST}}
+        </div>
+        <div id='tab-passed' class='tab-content'>
+            {{PASSED_REQUESTS_LIST}}
+        </div>
+        <div id='tab-failed' class='tab-content'>
+            {{FAIL_FILTERS}}
+            <div id='failed-list-container'>
+                <div id='no-results-placeholder' style='display:none; text-align:center; padding:40px 20px; color:var(--text-muted); font-size:1.1em; font-style:italic;'>No results found for the selected filters.</div>
+                {{FAILED_REQUESTS_LIST}}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id='detailsModal' class='modal'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h2 id='modal-title' style='font-size:1.2rem;margin:0;color:var(--text-main)'>Request Details</h2>
+                <span class='close' onclick='closeModal()'>&times;</span>
+            </div>
+            <div class='modal-body'>
+                <div class='modal-tabs'>
+                    <div id='tab-req' class='modal-tab active' onclick="openModalTab('req-panel', this)">Request</div>
+                    <div id='tab-res' class='modal-tab' onclick="openModalTab('res-panel', this)">Response</div>
+                    <div id='tab-assert' class='modal-tab' onclick="openModalTab('assertions-panel', this)" style='display:none;'>Assertions</div>
+                </div>
+                <div id='req-panel' class='modal-panel active'></div>
+                <div id='res-panel' class='modal-panel'></div>
+                <div id='assertions-panel' class='modal-panel'></div>
+            </div>
+        </div>
+    </div>
+
+    <div id='toast' class='toast'>Copied!</div>
+    <div id='filter-loader' style='display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;'>
+        <div style='border:4px solid #f3f3f3; border-top:4px solid var(--primary); border-radius:50%; width:40px; height:40px; animation:spin 1s linear infinite;'></div>
+    </div>
+
+    <script>
+        const samples = {{JSON_DATA}};
+        const passRate = {{PASS_RATE_JS}};
+        const totalFailed = {{TOTAL_FAILED}};
+        {{JS}}
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+model\TestSample$AssertionData.class
+listener\CustomHtmlReportListener.class
+generator\HtmlReportGenerator.class
+gui\CustomHtmlReportGui.class
+model\TestSample.class
